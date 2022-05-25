@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>TestItService</title>
+</head>
+<body>
+
+<form th:method="POST" th:action="@{/main}" th:object="${task}">
+
+    <select name="taskType">
+        <option th:each="taskType : ${T(ru.testitservice.tasktype.TaskType).values()}"
+                th:value="${taskType.displayValue}" th:text="${taskType}">
+        </option>
+    </select>
+    <textarea type="text" th:field="*{taskText}"></textarea>
+
+
+    <input type="submit" value="Calculate" name="action" >
+    <input type="submit" value="Save" name="action" >
+    <input type="submit" value="Export" name="action" >
+</form>
+<form method="POST" enctype="multipart/form-data" th:action="@{/main}">
+    File to upload: <input type="file" name="file">
+     <input type="submit"  value="Import" name="action"> Press here to upload the file!
+</form>
+<p th:text="${ans}" ></p>
+<button id="openDialog">Upload</button>
+<dialog id="favDialog" >
+    <div th:each="task : ${tasklist}">
+        <a th:href="@{/main/{id}(id=${task.getTaskDataId()})}"
+           th:text="${task.getDate() + ', ' + task.getTaskType()}">user</a>
+    </div>
+
+        <menu>
+            <button id="closeDialog">Close Dialog</button>
+        </menu>
+
+</dialog>
+<script>
+    var dialog = document.querySelector('dialog');
+    document.querySelector('#openDialog').onclick = function() {
+        dialog.show();
+    }
+    document.querySelector('#closeDialog').onclick = function() {
+        dialog.close();
+    }
+</script>
+</body>
+</html>
